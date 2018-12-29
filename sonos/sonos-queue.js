@@ -45,6 +45,7 @@ module.exports = function(RED) {
 		var payload = typeof msg.payload === 'object' ? msg.payload : {};
 
 		var _songuri = node.songuri;
+		var _name = node.name;
 		if (payload.songuri)
 			_songuri = payload.songuri;
 		
@@ -57,6 +58,12 @@ module.exports = function(RED) {
 		else if (node.position === "directplay" || payload.position === "directplay") {
 			node.log("Direct play URI: " + _songuri);
 			client.play(_songuri, function (err, result) {
+				helper.handleSonosApiRequest(node, err, result, msg, null, null);
+			});
+		} 
+		else if (node.position === "tuneinradio" || payload.position === "tuneinradio") {
+			node.log("Play Tune In Radio ID: " + _songuri);
+			client.playTuneinRadio(_songuri, _name, function (err, result) {
 				helper.handleSonosApiRequest(node, err, result, msg, null, null);
 			});
 		} 
